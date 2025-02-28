@@ -3,8 +3,6 @@ import Car_2 from "../../../assets/car-2.png";
 import Mark from "../../../assets/mark.png";
 import Switch from "../../../assets/Switch.png";
 import Card from "../components/Card/card";
-import { bundle } from "../../../components/Js File/bundle";
-import Footer from "../components/Footer/footer";
 
 const Home = () => {
   return (
