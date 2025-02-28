@@ -12,12 +12,13 @@ const cardVariants = {
 };
 
 const Card = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data: ride, isLoading } = GetAllRides();
-  const {mutate:deleteRide, isPending:isDeleteing} = useDeleteRide()
+  const { mutate: deleteRide, isPending: isDeleting } = useDeleteRide();
 
-  const handleDelete = (rid) => {
-    deleteRide(rid)
+  const handleDelete = (rid, event) => {
+    event.stopPropagation(); // Prevent navigation
+    deleteRide(rid);
   };
 
   if (isLoading) {
@@ -27,9 +28,8 @@ const Card = () => {
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
       {ride?.data?.map((item) => (
-        <Link to={`/ride/${item._id}`}>
         <motion.div
-          key={item.id}
+          key={item._id}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
@@ -38,32 +38,48 @@ const Card = () => {
         >
           {/* Title & Action Icons */}
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-semibold text-xl text-gray-900">{item.name}</h4>
+            <Link to={`/ride/${item._id}`} className="flex-1">
+              <h4 className="font-semibold text-xl text-gray-900">{item.name}</h4>
+            </Link>
             <div className="flex items-center space-x-3">
               <motion.div whileTap={{ scale: 0.8 }}>
                 <IoHeart className="text-red-500 cursor-pointer transition-transform hover:scale-110 text-2xl" />
               </motion.div>
               <motion.div whileTap={{ scale: 0.8 }}>
-                <FiEdit className="text-blue-500 cursor-pointer transition-transform hover:scale-110 text-xl" onClick={() => navigate(`/edit/${item._id}`)}/>
+                <FiEdit
+                  className="text-blue-500 cursor-pointer transition-transform hover:scale-110 text-xl"
+                  onClick={() => navigate(`/edit/${item._id}`)}
+                />
               </motion.div>
               <motion.div whileTap={{ scale: 0.8 }}>
-                {isDeleteing ?    
-                 <div className="flex items-center justify-center">
-      <div className="w-6 h-6 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-    </div>
-:  <IoTrashOutline className="text-gray-600 cursor-pointer transition-transform hover:scale-110 text-2xl" onClick={() => handleDelete(item._id)} />
-}          
+                {isDeleting ? (
+                  <div className="flex items-center justify-center">
+                    <div className="w-6 h-6 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                  </div>
+                ) : (
+                  <IoTrashOutline
+                    className="text-gray-600 cursor-pointer transition-transform hover:scale-110 text-2xl"
+                    onClick={(e) => handleDelete(item._id, e)}
+                  />
+                )}
               </motion.div>
             </div>
           </div>
-          <motion.div whileHover={{ scale: 1.03 }} className="mb-4 overflow-hidden rounded-xl">
-            <img
-              src={item.image}
-              alt={item.text || "Card image"}
-              className="w-full h-[200px] object-cover rounded-lg shadow-sm"
-            />
-          </motion.div>
-          <p className="text-gray-600 text-[15px] mb-3">{item.type} - {item.year}</p>
+
+          {/* Image inside Link */}
+          <Link to={`/ride/${item._id}`} className="mb-4 overflow-hidden rounded-xl block">
+            <motion.div whileHover={{ scale: 1.03 }}>
+              <img
+                src={item.image}
+                alt={item.text || "Card image"}
+                className="w-full h-[200px] object-cover rounded-lg shadow-sm"
+              />
+            </motion.div>
+          </Link>
+
+          <p className="text-gray-600 text-[15px] mb-3">
+            {item.type} - {item.year}
+          </p>
 
           {/* Price & Button */}
           <div className="flex justify-between items-center mt-auto">
@@ -77,7 +93,6 @@ const Card = () => {
             </motion.button>
           </div>
         </motion.div>
-      </Link>
       ))}
     </div>
   );
