@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { QUERY_KEYS } from "../enum";
 
-const BASE_URL = 'https://inverted-index-api-morrent.onrender.com';
+const BASE_URL = 'https://inverted-index-api-3.onrender.com';
 export const CreateUserAccount = () => {
     return useMutation({
         mutationFn: async ({ email, fullname, password }) => {
