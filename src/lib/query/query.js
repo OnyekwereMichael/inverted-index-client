@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { QUERY_KEYS } from "../enum";
+
+const BASE_URL = 'https://inverted-index-api-morrent.onrender.com';
 export const CreateUserAccount = () => {
     return useMutation({
         mutationFn: async ({ email, fullname, password }) => {
             try {
-                const res = await fetch('http://localhost:5000/api/auth/signup', {
+                const res = await fetch(`${BASE_URL}/api/auth/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, fullname, password })
@@ -32,7 +34,7 @@ export const SignInAccount = () => {
     return useMutation({
         mutationFn: async ({ email, password }) => {
             try {
-                const res = await fetch('http://localhost:5000/api/auth/signin', {
+                const res = await fetch(`${BASE_URL}/api/auth/signin`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -55,7 +57,7 @@ export const useLogout = () => {
     return useMutation({
         mutationFn: async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/auth/logout', {
+                const res = await fetch(`${BASE_URL}/api/auth/logout`, {
                     method: 'POST',
                 });
                 const data = await res.json();
@@ -76,7 +78,7 @@ export const GetAuthUser = () => {
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
         queryFn: async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/auth/me');
+                const res = await fetch(`${BASE_URL}/api/auth/me`);
                 const data = await res.json();
                 if (data.error) return null;
                 if (!res.ok) throw new Error(data.error);
@@ -100,7 +102,7 @@ export const GetAllRides = () => {
         queryKey: [QUERY_KEYS.GET_RIDES], 
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/ride`);
+                const res = await fetch(`${BASE_URL}/api/ride`);
                 const data = await res.json();
                 // if (data.error) return null;
                 if (!res.ok) throw new Error(data.error || "Failed to fetch rides");
@@ -122,7 +124,7 @@ export const useSearchRides = (query) => {
             if (!query || query.trim() === "") return [];  // Prevent empty queries
             
             try {
-                const res = await fetch(`http://localhost:5000/api/ride/search?query=${query}`);
+                const res = await fetch(`${BASE_URL}/api/ride/search?query=${query}`);
                 const data = await res.json();
                 
                 if (!res.ok) throw new Error(data.message || "Failed to fetch posts"); // Use message, not error
@@ -146,7 +148,7 @@ export const useDeleteRide = () => {
     return useMutation({
         mutationFn: async (rid) => {
             try {
-                const res = await fetch(`http://localhost:5000/api/ride/delete/${rid}`, {
+                const res = await fetch(`${BASE_URL}/api/ride/delete/${rid}`, {
                     method: 'DELETE',
                 });
                 const data = await res.json();
@@ -171,7 +173,7 @@ export const useCreateRide = () => {
     return useMutation({
         mutationFn: async ({ name, year, type, price, image}) => {
             try {
-                const res = await fetch('http://localhost:5000/api/ride/create', {
+                const res = await fetch(`${BASE_URL}/api/ride/create`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, type, price, image, year}),
@@ -202,7 +204,7 @@ export const useEditRide = () => {
                     throw new Error("At least one field is required to update your post.");
                 }
 
-                const res = await fetch(`http://localhost:5000/api/ride/update/${rid}`, {
+                const res = await fetch(`${BASE_URL}/api/ride/update/${rid}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, year, type, price, image}),
@@ -230,7 +232,7 @@ export const useGetRideById = (id) => {
         queryKey: [QUERY_KEYS.GET_RIDES, id],
         queryFn: async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/ride/${id}`);
+                const res = await fetch(`${BASE_URL}/api/ride/${id}`);
                 if (!res.ok) throw new Error("Failed to fetch ride");
                 const data = await res.json();
                 return data;

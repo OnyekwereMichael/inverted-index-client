@@ -32,9 +32,9 @@ const Checkout = () => {
     <div className="bg-gray-50 flex flex-col  p-4">
       <div className="max-w-5xl mx-auto p-5 w-full bg-white shadow-lg rounded-lg">
         <div className="flex gap-4 justify-center items-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-700">
+          {/* <h2 className="text-2xl md:text-3xl font-bold text-center text-blue-700">
             CHECKOUT
-          </h2>
+          </h2> */}
           <FaShoppingCart size={24} />
         </div>
 

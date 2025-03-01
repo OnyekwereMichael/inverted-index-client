@@ -75,12 +75,12 @@ const CarDetails = () => {
               Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.
             </p>
           </div>
-          <div className="mt-6 flex space-x-4">
+          <div className="mt-6 flex space-x-4 max-sm:flex-col max-sm:space-y-4">
             <Link to={'/cart'}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg transition-colors max-sm:w-full"
             onClick={() => AddToCart(ride.data)}>
               Rent Now
             </motion.button>
